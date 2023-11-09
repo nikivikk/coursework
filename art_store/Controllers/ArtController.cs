@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using art_store.Entities;
+using art_store.DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace art_store.Controllers
 {
