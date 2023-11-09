@@ -5,6 +5,10 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store", "art_store\art_store.csproj", "{A450DF74-5FA8-4E9E-BB78-5CF9C5C95723}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.Entities", "art_stor.Entities\art_store.Entities.csproj", "{7C9C5C5D-D3A5-431E-88C1-18599A215B35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.DataAccess", "art_store.DataAccess\art_store.DataAccess.csproj", "{1A73103D-18B6-412F-A618-0ADA0FE08601}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A450DF74-5FA8-4E9E-BB78-5CF9C5C95723}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A450DF74-5FA8-4E9E-BB78-5CF9C5C95723}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A450DF74-5FA8-4E9E-BB78-5CF9C5C95723}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9C5C5D-D3A5-431E-88C1-18599A215B35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9C5C5D-D3A5-431E-88C1-18599A215B35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9C5C5D-D3A5-431E-88C1-18599A215B35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9C5C5D-D3A5-431E-88C1-18599A215B35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A73103D-18B6-412F-A618-0ADA0FE08601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A73103D-18B6-412F-A618-0ADA0FE08601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A73103D-18B6-412F-A618-0ADA0FE08601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A73103D-18B6-412F-A618-0ADA0FE08601}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
