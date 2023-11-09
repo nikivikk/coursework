@@ -10,25 +10,60 @@ namespace art_store.Controllers
     public class ArtController : ControllerBase
     {
 
+        public readonly art_storeDbContext _art_storeContext;
 
-        //название метода который мы вызываем, для стандартного get не нужно
+        public ArtController(art_storeDbContext art_storeContext)
+        {
+            _art_storeContext = art_storeContext;
+        }
 
-        //[HttpGet(Name = "GetWeatherForecast")]
         [HttpGet]
 
-        public IEnumerable<Art> GetAll()
+        public async Task<ActionResult<IEnumerable<Art>>> GetAll()
         {
-            return new List<Art>()
-            {
-                new Art()
-                {
-                    Id = 1,
-                    Name = "Test",
-                    Status = true,
-                    Year = DateTime.Now
-                }
-            };
+            return await _art_storeContext.Arts.ToListAsync();
                 
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> Create([FromBody] Art art)
+        {
+            var newArt = new Art
+            {
+                Name = art.Name,
+                Author = art.Author,
+                Status = art.Status,
+                Driver = art.Driver,
+                Year = art.Year,
+                Price = art.Price
+            };
+
+            await _art_storeContext.Arts.AddAsync(newArt);
+            await _art_storeContext.SaveChangesAsync();
+            return newArt.Id;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Art>> GetArtById(int id)
+        {
+            var art = await _art_storeContext.Arts.FindAsync(id);
+            if (art == null)
+                return NotFound();
+
+            return Ok(art);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteProductById(int id)
+        {
+            var art = await _art_storeContext.Arts.FindAsync(id);
+
+            if (art == null)
+                return NotFound();
+
+            _art_storeContext.Arts.Remove(art);
+            await _art_storeContext.SaveChangesAsync();
+            return Ok();
         }
     }
 }

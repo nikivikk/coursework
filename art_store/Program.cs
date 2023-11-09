@@ -10,14 +10,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-var connectionString = builder.Configuration.GetConnectionString("Default");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new ApplicationException("Could not load 'Default' connection string");
+    throw new ApplicationException("Could not load 'DefaultConnection' connection string");
 }
 
 builder.Services.AddDbContext<art_storeDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(ConfigurationExtensions.GetConnectionString(builder.Configuration, "DefaultConnection"))
+            );
 
 
 var app = builder.Build();

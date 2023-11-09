@@ -13,7 +13,6 @@
 
         public DateTime Year { get; set; }
 
-
-
+        public float Price { get; set; }
     }
 }
