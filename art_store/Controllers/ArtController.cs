@@ -22,7 +22,7 @@ namespace art_store.Controllers
         public async Task<ActionResult<IEnumerable<Art>>> GetAll()
         {
             return await _art_storeContext.Arts.ToListAsync();
-                
+
         }
 
         [HttpPost]
@@ -42,6 +42,29 @@ namespace art_store.Controllers
             await _art_storeContext.SaveChangesAsync();
             return newArt.Id;
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateArt(int id, [FromBody] Art art)
+        {
+            var existingArt = await _art_storeContext.Arts.FindAsync(id);
+
+            if (existingArt == null)
+                return NotFound();
+
+            existingArt.Name = art.Name;
+            existingArt.Author = art.Author;
+            existingArt.Status = art.Status;
+            existingArt.Driver = art.Driver;
+            existingArt.Year = art.Year;
+            existingArt.Price = art.Price;
+
+            _art_storeContext.Arts.Update(existingArt);
+            await _art_storeContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Art>> GetArtById(int id)
