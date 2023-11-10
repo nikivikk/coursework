@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using art_store.DataAccess;
 
@@ -11,9 +12,11 @@ using art_store.DataAccess;
 namespace art_store.DataAccess.Migrations
 {
     [DbContext(typeof(art_storeDbContext))]
-    partial class art_storeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231110143915_AddedAdminsTable")]
+    partial class AddedAdminsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
