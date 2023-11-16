@@ -21,7 +21,9 @@ namespace art_store.Controllers
 
         public async Task<ActionResult<IEnumerable<Art>>> GetAll()
         {
-            return await _art_storeContext.Arts.ToListAsync();
+            return await _art_storeContext.Arts
+                .Include(x => x.Order)
+                .ToListAsync();
 
         }
 
