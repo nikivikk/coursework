@@ -8,7 +8,5 @@ public class Order
     public string DeliveryAddress { get; set; }
     public DateTime DeliveryData { get; set; }
     public List<int> ArtIds { get; set; }
-
-    [JsonIgnore]
     public List<Art> Arts { get; set; }
 }
