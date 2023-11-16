@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using art_store.DataAccess;
 using Microsoft.AspNetCore.Mvc;
-using art_store.Entities;
-using art_store.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace art_store.Controllers
@@ -21,10 +18,12 @@ namespace art_store.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetAll()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders
+            // По умолчанию и без доп настроек EF не будет подтягивать арты, поэтому добавил следующую строчку
+                .Include(x => x.Arts)
+                .ToListAsync();
         }
 
-        [HttpPost]
         [HttpPost]
         public async Task<ActionResult<int>> Create([FromBody] Order order)
         {
@@ -34,7 +33,10 @@ namespace art_store.Controllers
                 UserId = order.UserId,
                 DeliveryAddress = order.DeliveryAddress,
                 DeliveryData = order.DeliveryData,
-                ArtIds = order.ArtIds
+                // Если хотим создать ордер сразу с артами, то передаём сразу объекты
+                // Если хочешь выбрать уже существующие арты, то нужно делать как в методе AddArtsToOrder
+                // То есть сначала добавить Order, а потом уже в артах менять OrderId
+                Arts = order.Arts,
             };
 
             await _context.Orders.AddAsync(newOrder);
@@ -45,16 +47,21 @@ namespace art_store.Controllers
         [HttpPost("AddArtsToOrder/{orderId}")]
         public async Task<IActionResult> AddArtsToOrder(int orderId, [FromBody] List<int> artIds)
         {
-            var order = await _context.Orders.FindAsync(orderId);
-            if (order == null)
+            var order = await _context.Orders.FindAsync(orderId)
+                ?? throw new Exception("Order not found");
+
+            // Тут ты добавляешь новые арты в ордер а не добавляешь существующие, а по сути у тебя нужно просто Id в оредере менять, потому что у тебя арты только в одинарном количестве
+            //var arts = await _context.Arts.Where(a => artIds.Contains(a.Id)).ToListAsync();
+            //order.Arts.AddRange(arts);
+
+            var arts = await _context.Arts.Where(a => artIds.Contains(a.Id)).ToListAsync()
+                ?? throw new Exception("Arts not found");
+
+            foreach (var art in arts)
             {
-                return NotFound();
+                art.OrderId = orderId;
             }
 
-            var arts = await _context.Arts.Where(a => artIds.Contains(a.Id)).ToListAsync();
-            order.Arts.AddRange(arts);
-
-            _context.Orders.Update(order);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -72,7 +79,6 @@ namespace art_store.Controllers
             existingOrder.UserId = order.UserId;
             existingOrder.DeliveryAddress = order.DeliveryAddress;
             existingOrder.DeliveryData = order.DeliveryData;
-            existingOrder.ArtIds = order.ArtIds;
 
             _context.Orders.Update(existingOrder);
             await _context.SaveChangesAsync();

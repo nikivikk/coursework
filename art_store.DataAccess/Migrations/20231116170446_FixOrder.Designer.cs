@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using art_store.DataAccess;
 
@@ -11,9 +12,11 @@ using art_store.DataAccess;
 namespace art_store.DataAccess.Migrations
 {
     [DbContext(typeof(art_storeDbContext))]
-    partial class art_storeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231116170446_FixOrder")]
+    partial class FixOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +64,7 @@ namespace art_store.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
@@ -147,7 +150,9 @@ namespace art_store.DataAccess.Migrations
                 {
                     b.HasOne("Order", "Order")
                         .WithMany("Arts")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Order");
                 });

@@ -1,5 +1,4 @@
 ﻿using art_store.Entities;
-using System.Text.Json.Serialization;
 
 public class Order
 {
@@ -7,6 +6,6 @@ public class Order
     public int UserId { get; set; }
     public string DeliveryAddress { get; set; }
     public DateTime DeliveryData { get; set; }
-    public List<int> ArtIds { get; set; }
-    public List<Art> Arts { get; set; }
+    // Здесь не нужны айдишки артов, достаточно просто объектов, посмотри про связь один ко многи в EF
+    public List<Art>? Arts { get; set; }
 }
