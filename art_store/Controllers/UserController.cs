@@ -30,9 +30,9 @@ namespace art_store.Controllers
             var newUser = new User
             {
                 Fio = user.Fio,
+                Role = user.Role,
                 Email = user.Email,
                 Password = user.Password,
-                UserCardId = user.UserCardId,
                 Age = user.Age
             };
 
@@ -50,9 +50,9 @@ namespace art_store.Controllers
                 return NotFound();
 
             existingUser.Fio = user.Fio;
+            existingUser.Role = user.Role;
             existingUser.Email = user.Email;
             existingUser.Password = user.Password;
-            existingUser.UserCardId = user.UserCardId;
             existingUser.Age = user.Age;
 
             _art_storeContext.Users.Update(existingUser);

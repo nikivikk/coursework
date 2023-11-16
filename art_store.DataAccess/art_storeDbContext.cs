@@ -11,7 +11,7 @@ namespace art_store.DataAccess
 
         public DbSet<Art>  Arts { get; set; }
         public DbSet<User> Users { get; set; }
-
-        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
     }
 }

@@ -33,7 +33,6 @@ namespace art_store.Controllers
                 Name = art.Name,
                 Author = art.Author,
                 Status = art.Status,
-                Driver = art.Driver,
                 Year = art.Year,
                 Price = art.Price
             };
@@ -54,7 +53,6 @@ namespace art_store.Controllers
             existingArt.Name = art.Name;
             existingArt.Author = art.Author;
             existingArt.Status = art.Status;
-            existingArt.Driver = art.Driver;
             existingArt.Year = art.Year;
             existingArt.Price = art.Price;
 
