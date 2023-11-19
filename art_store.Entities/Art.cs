@@ -8,8 +8,6 @@
         public DateTime Year { get; set; }
         public float Price { get; set; }
         public int Id { get; set; }
-
-        /// Сделал nullable, потому что арты могу существовать без ордера
         public int? OrderId { get; set; }
         public Order? Order { get; set; }
     }
