@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using art_store.DataAccess;
 
@@ -11,9 +12,11 @@ using art_store.DataAccess;
 namespace art_store.DataAccess.Migrations
 {
     [DbContext(typeof(art_storeDbContext))]
-    partial class art_storeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231119182022_FixDriver")]
+    partial class FixDriver
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,6 +141,9 @@ namespace art_store.DataAccess.Migrations
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserCardId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

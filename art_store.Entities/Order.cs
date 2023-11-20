@@ -6,6 +6,18 @@ public class Order
     public int UserId { get; set; }
     public string DeliveryAddress { get; set; }
     public DateTime DeliveryData { get; set; }
-    // Здесь не нужны айдишки артов, достаточно просто объектов, посмотри про связь один ко многи в EF
     public List<Art>? Arts { get; set; }
+
+    public Driver? Driver { get; set; }
+
+    public int? DriverId { get; set; }
+
+    public User? User { get; set; }
+
+
+
+
+    //public List<Driver> Drivers { get; set; }
+
+    //public List<User> Users { get; set; }
 }
