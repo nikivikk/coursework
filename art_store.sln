@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.Services.Contract
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.art_storeDto", "art_store.art_storeDto\art_store.art_storeDto.csproj", "{84F72243-6E46-4523-BECE-9BAE05BE6654}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.UnitTests", "art_store.UnitTests\art_store.UnitTests.csproj", "{317CCE40-DEBF-4A16-A17C-83BDFCF68512}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{84F72243-6E46-4523-BECE-9BAE05BE6654}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84F72243-6E46-4523-BECE-9BAE05BE6654}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84F72243-6E46-4523-BECE-9BAE05BE6654}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317CCE40-DEBF-4A16-A17C-83BDFCF68512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317CCE40-DEBF-4A16-A17C-83BDFCF68512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317CCE40-DEBF-4A16-A17C-83BDFCF68512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317CCE40-DEBF-4A16-A17C-83BDFCF68512}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
