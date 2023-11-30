@@ -1,6 +1,6 @@
-﻿using art_store.DataAccess;
+﻿using art_store.art_storeDto;
+using art_store.Services.Contract;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace art_store.Controllers
 {
@@ -8,99 +8,47 @@ namespace art_store.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly art_storeDbContext _context;
 
-        public OrderController(art_storeDbContext context)
+        public readonly IOrderService _orderService;
+
+        public OrderController(IOrderService orderService)
         {
-            _context = context;
+            _orderService = orderService;
         }
 
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetAll()
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetAll()
         {
-            return await _context.Orders
-          
-                .Include(x => x.Arts)
-                .ToListAsync();
+            return await _orderService.GetAll();
+
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] Order order)
+        public async Task<ActionResult<int>> Create([FromBody] OrderDto order)
         {
-
-            var newOrder = new Order
-            {
-                UserId = order.UserId,
-                DeliveryAddress = order.DeliveryAddress,
-                DeliveryData = order.DeliveryData,
-                Arts = order.Arts,
-            };
-
-            await _context.Orders.AddAsync(newOrder);
-            await _context.SaveChangesAsync();
-            return newOrder.Id;
+            return await _orderService.Create(order);
         }
-
-        [HttpPost("AddArtsToOrder/{orderId}")]
-        public async Task<IActionResult> AddArtsToOrder(int orderId, [FromBody] List<int> artIds)
-        {
-            var order = await _context.Orders.FindAsync(orderId)
-                ?? throw new Exception("Order not found");
-
-
-            var arts = await _context.Arts.Where(a => artIds.Contains(a.Id)).ToListAsync()
-                ?? throw new Exception("Arts not found");
-
-            foreach (var art in arts)
-            {
-                art.OrderId = orderId;
-            }
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, [FromBody] Order order)
+        public async Task<ActionResult<int>> UpdateOrder([FromBody] OrderDto order)
         {
-            var existingOrder = await _context.Orders.FindAsync(id);
-
-            if (existingOrder == null)
-                return NotFound();
-
-            existingOrder.UserId = order.UserId;
-            existingOrder.DeliveryAddress = order.DeliveryAddress;
-            existingOrder.DeliveryData = order.DeliveryData;
-
-            _context.Orders.Update(existingOrder);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return await _orderService.Update(order);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrderById(int id)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-                return NotFound();
 
-            return Ok(order);
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderDto>> GetOrderById(int id)
+        {
+            return await _orderService.GetById(id);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteOrderById(int id)
+        public async Task<ActionResult<int>> DeleteProductById(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-
-            if (order == null)
-                return NotFound();
-
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
-            return Ok();
+            return await _orderService.Delete(id);
         }
     }
 }
+

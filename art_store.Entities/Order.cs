@@ -3,7 +3,7 @@
 public class Order
 {
     public int Id { get; set; }
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     public string DeliveryAddress { get; set; }
     public DateTime DeliveryData { get; set; }
     public List<Art>? Arts { get; set; }

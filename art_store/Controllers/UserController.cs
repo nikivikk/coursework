@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using art_store.Entities;
-using art_store.DataAccess;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using art_store.Services.Contract;
+using art_store.art_storeDto;
 
 namespace art_store.Controllers
 {
@@ -11,78 +8,46 @@ namespace art_store.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly art_storeDbContext _art_storeContext;
 
-        public UserController(art_storeDbContext art_storeContext)
+        public readonly IUserService _userService;
+
+        public UserController(IUserService userService)
         {
-            _art_storeContext = art_storeContext;
+            _userService = userService;
         }
 
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
         {
-            return await _art_storeContext.Users.ToListAsync();
+            return await _userService.GetAll();
+
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] User user)
+        public async Task<ActionResult<int>> Create([FromBody] UserDto user)
         {
-            var newUser = new User
-            {
-                Fio = user.Fio,
-                Role = user.Role,
-                Email = user.Email,
-                Password = user.Password,
-                Age = user.Age
-            };
-
-            await _art_storeContext.Users.AddAsync(newUser);
-            await _art_storeContext.SaveChangesAsync();
-            return newUser.Id;
+            return await _userService.Create(user);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User user)
+        public async Task<ActionResult<int>> UpdateArt([FromBody] UserDto user)
         {
-            var existingUser = await _art_storeContext.Users.FindAsync(id);
-
-            if (existingUser == null)
-                return NotFound();
-
-            existingUser.Fio = user.Fio;
-            existingUser.Role = user.Role;
-            existingUser.Email = user.Email;
-            existingUser.Password = user.Password;
-            existingUser.Age = user.Age;
-
-            _art_storeContext.Users.Update(existingUser);
-            await _art_storeContext.SaveChangesAsync();
-
-            return NoContent();
+            return await _userService.Update(user);
         }
+
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserById(int id)
+        public async Task<ActionResult<UserDto>> GetArtById(int id)
         {
-            var user = await _art_storeContext.Users.FindAsync(id);
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
+            return await _userService.GetById(id);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUserById(int id)
+        public async Task<ActionResult<int>> DeleteProductById(int id)
         {
-            var user = await _art_storeContext.Users.FindAsync(id);
-
-            if (user == null)
-                return NotFound();
-
-            _art_storeContext.Users.Remove(user);
-            await _art_storeContext.SaveChangesAsync();
-            return Ok();
+            return await _userService.Delete(id);
         }
     }
 }

@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
@@ -19,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\art_store.DataAccess\art_store.DataAccess.csproj" />
+    <ProjectReference Include="..\art_store.Services.Contract\art_store.Services.Contract.csproj" />
+    <ProjectReference Include="..\art_store.Services\art_store.Services.csproj" />
   </ItemGroup>
 
 </Project>
