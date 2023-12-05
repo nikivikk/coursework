@@ -8,6 +8,7 @@
         public DateTime Year { get; set; }
         public float Price { get; set; }
         public int Id { get; set; }
+        public string PictureLink { get; set; }
         public int? OrderId { get; set; }
         public Order? Order { get; set; }
     }

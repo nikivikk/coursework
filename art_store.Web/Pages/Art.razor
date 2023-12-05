@@ -31,12 +31,26 @@
 }
 else
 {
-    <MudPaper Elevation="1" Outlined="true">
+    @* <MudPaper Elevation="1" Outlined="true">
         <MudText Typo="Typo.h6">@art.Name</MudText>
         <MudText Typo="Typo.body1">Author: @art.Author</MudText>
         <MudText Typo="Typo.body1">Year: @art.Year</MudText>
         <MudText Typo="Typo.body1">Price: @art.Price</MudText>
-    </MudPaper>
+    </MudPaper> *@
+    <div style="display: flex; justify-content: center;">
+        <MudCard Height="450" Style="object-fit: contain; width: 450px;">
+            <MudCardMedia Image=@art.PictureLink Height="350" Style="object-fit: contain; width: 450px;" />
+            <MudCardContent>
+                <MudText Typo="Typo.h4">@art.Name</MudText>
+                <MudText Typo="Typo.h5">Author: @art.Author</MudText>
+                <MudText Typo="Typo.h4">Price: $@art.Price</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary">Order</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </div>
+
 }
 
 

@@ -11,6 +11,7 @@ namespace art_store.art_storeDto
         public string Name { get; set; }
         public string Author { get; set; }
         public bool Status { get; set; }
+        public string PictureLink { get; set; }
         public DateTime Year { get; set; }
         public float Price { get; set; }
         public int? OrderId { get; set; }
