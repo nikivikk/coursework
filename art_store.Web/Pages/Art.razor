@@ -1,0 +1,42 @@
+﻿@page "/art/{Id:int}"
+
+@using MudBlazor
+@using art_store.Services.Contract;
+@using art_store.art_storeDto;
+@inject IArtService _artService;
+@inject NavigationManager NavManager;
+
+
+<PageTitle>Art Details</PageTitle>
+
+@code {
+    private ArtDto? art;
+    [Parameter]
+    public int Id { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+
+        {
+            art = await _artService.GetById(Id);
+            if (art == null)
+            {
+                throw new Exception("Art object does not exist.");
+            }
+        }
+    }
+}
+@if (art == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <MudPaper Elevation="1" Outlined="true">
+        <MudText Typo="Typo.h6">@art.Name</MudText>
+        <MudText Typo="Typo.body1">Author: @art.Author</MudText>
+        <MudText Typo="Typo.body1">Year: @art.Year</MudText>
+        <MudText Typo="Typo.body1">Price: @art.Price</MudText>
+    </MudPaper>
+}
+
+

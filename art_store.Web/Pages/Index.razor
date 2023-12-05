@@ -1,9 +1,38 @@
 ﻿@page "/"
 
+@using MudBlazor
+@using art_store.Services.Contract;
+@using art_store.art_storeDto;
+@inject IArtService _artService;
+@inject NavigationManager NavManager;
+
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudTable Items="@arts" Hover="true" Breakpoint="Breakpoint.Sm">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Author</MudTh>
+        <MudTh>Year</MudTh>
+        <MudTh>Price</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Author">@context.Author</MudTd>
+        <MudTd DataLabel="Year">@context.Year</MudTd>
+        <MudTd DataLabel="Price">@context.Price</MudTd>
+        <MudTd DataLabel="Actions"><MudButton OnClick="@( () => OnGetArtClick(context) )" Variant="Variant.Filled" Color="Color.Primary">Go to product</MudButton></MudTd>
+    </RowTemplate>
+</MudTable>
+@code {
+    private List<ArtDto>? arts;
+    protected async override Task OnInitializedAsync()
+    {
+        arts = await _artService.GetAll();
+    }
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+    private void OnGetArtClick(ArtDto context)
+    {
+        NavManager.NavigateTo($"/art/{context.Id}");
+    }
+}

@@ -6,7 +6,7 @@ using AutoMapper;
 
 namespace art_store.Services
 {
-    public class ArtService : IArtService 
+    public class ArtService : IArtService
     {
         public readonly IArtRepository _artRepository;
         public readonly IMapper _mapper;
@@ -39,7 +39,8 @@ namespace art_store.Services
             return await _artRepository.Update(artToUpdate);
         }
 
-        public async Task<int> Delete(int id) {
+        public async Task<int> Delete(int id)
+        {
             var artToDelete = await _artRepository.GetById(id)
             ?? throw new Exception("Art not exist");
             return await _artRepository.Delete(id);
@@ -55,7 +56,7 @@ namespace art_store.Services
         public async Task<List<ArtDto>> GetAll()
         {
             var arts = await _artRepository.GetAll();
-            return _mapper.Map<List<ArtDto>>( arts);
+            return _mapper.Map<List<ArtDto>>(arts);
         }
 
     }

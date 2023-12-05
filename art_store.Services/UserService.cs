@@ -54,6 +54,13 @@ namespace art_store.Services
             return _mapper.Map<UserDto>(user);
         }
 
+        public async Task<UserDto> GetByEmail(string email)
+        {
+            var user = await _userRepository.GetByEmail(email);
+
+            return _mapper.Map<UserDto>(user);
+        }
+
         public async Task<List<UserDto>> GetAll()
         {
             var users = await _userRepository.GetAll();
