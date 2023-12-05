@@ -10,6 +10,7 @@ namespace art_store.Services.Contract
 
         Task<List<UserDto>> GetAll();
 
+        Task<UserDto> GetByEmail(string email);
         Task<int> Create(UserDto user);
 
         Task<int> Update(UserDto user);

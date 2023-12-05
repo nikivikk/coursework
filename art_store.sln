@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "art_store.Entities", "art_s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "art_store.Services", "art_store.Services\art_store.Services.csproj", "{82C2A60D-B539-46EE-B14E-976AA987F402}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.Services.Contract", "art_store.Services.Contract\art_store.Services.Contract.csproj", "{43DECF4C-5BCE-42FD-8B1C-4D7DD4B04B99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "art_store.Services.Contract", "art_store.Services.Contract\art_store.Services.Contract.csproj", "{43DECF4C-5BCE-42FD-8B1C-4D7DD4B04B99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.art_storeDto", "art_store.art_storeDto\art_store.art_storeDto.csproj", "{84F72243-6E46-4523-BECE-9BAE05BE6654}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "art_store.art_storeDto", "art_store.art_storeDto\art_store.art_storeDto.csproj", "{84F72243-6E46-4523-BECE-9BAE05BE6654}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.UnitTests", "art_store.UnitTests\art_store.UnitTests.csproj", "{317CCE40-DEBF-4A16-A17C-83BDFCF68512}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "art_store.UnitTests", "art_store.UnitTests\art_store.UnitTests.csproj", "{317CCE40-DEBF-4A16-A17C-83BDFCF68512}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "art_store.Web", "art_store.Web\art_store.Web.csproj", "{E3616B03-1485-4F66-8896-9AB1E5C89DC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "art_store.Web", "art_store.Web\art_store.Web.csproj", "{E3616B03-1485-4F66-8896-9AB1E5C89DC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

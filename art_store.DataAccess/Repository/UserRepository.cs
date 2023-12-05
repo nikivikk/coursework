@@ -40,5 +40,10 @@ namespace art_store.DataAccess.Repository
         {
             return await _art_storeContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            return await _art_storeContext.Users.FirstOrDefaultAsync(x => x.Email == email);
+        }
     }
 }
