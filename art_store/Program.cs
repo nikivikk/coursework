@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using art_store.DataAccess;
 using System.Text.Json.Serialization;
+using art_store.Services.Contract;
+using art_store.DataAccess.Repository;
+using art_store.DataAccess.Repository.Contracts;
+using art_store.Services;
+using art_store.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +32,19 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<art_storeDbContext>(options =>
             options.UseSqlServer(ConfigurationExtensions.GetConnectionString(builder.Configuration, "DefaultConnection"))
             );
+
+builder.Services.AddScoped<IArtRepository, ArtRepository>();
+builder.Services.AddScoped<IArtService, ArtService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+builder.Services.AddScoped<IDriverService, DriverService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddAutoMapper(typeof(ArtProfile));
+builder.Services.AddAutoMapper(typeof(DriverProfile));
+builder.Services.AddAutoMapper(typeof(OrderProfile));
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 
 var app = builder.Build();

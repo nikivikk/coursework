@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using art_store.Entities;
-using art_store.DataAccess;
-using Microsoft.EntityFrameworkCore;
+using art_store.Services.Contract;
+using art_store.art_storeDto;
 
 namespace art_store.Controllers
 {
@@ -10,83 +9,45 @@ namespace art_store.Controllers
     public class ArtController : ControllerBase
     {
 
-        public readonly art_storeDbContext _art_storeContext;
+        public readonly IArtService _artService;
 
-        public ArtController(art_storeDbContext art_storeContext)
+        public ArtController(IArtService artService)
         {
-            _art_storeContext = art_storeContext;
+            _artService = artService;
         }
 
-        [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<Art>>> GetAll()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ArtDto>>> GetAll()
         {
-            return await _art_storeContext.Arts
-                .Include(x => x.Order)
-                .ToListAsync();
+            return await _artService.GetAll();
 
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] Art art)
+        public async Task<ActionResult<int>> Create([FromBody] ArtDto art)
         {
-            var newArt = new Art
-            {
-                Name = art.Name,
-                Author = art.Author,
-                Status = art.Status,
-                Year = art.Year,
-                Price = art.Price
-            };
-
-            await _art_storeContext.Arts.AddAsync(newArt);
-            await _art_storeContext.SaveChangesAsync();
-            return newArt.Id;
+            return await _artService.Create(art);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateArt(int id, [FromBody] Art art)
+        public async Task<ActionResult<int>> UpdateArt([FromBody] ArtDto art)
         {
-            var existingArt = await _art_storeContext.Arts.FindAsync(id);
-
-            if (existingArt == null)
-                return NotFound();
-
-            existingArt.Name = art.Name;
-            existingArt.Author = art.Author;
-            existingArt.Status = art.Status;
-            existingArt.Year = art.Year;
-            existingArt.Price = art.Price;
-
-            _art_storeContext.Arts.Update(existingArt);
-            await _art_storeContext.SaveChangesAsync();
-
-            return NoContent();
+            return await _artService.Update(art);
         }
 
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Art>> GetArtById(int id)
+        public async Task<ActionResult<ArtDto>> GetArtById(int id)
         {
-            var art = await _art_storeContext.Arts.FindAsync(id);
-            if (art == null)
-                return NotFound();
-
-            return Ok(art);
+            return await _artService.GetById(id);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProductById(int id)
+        public async Task<ActionResult<int>>DeleteProductById(int id)
         {
-            var art = await _art_storeContext.Arts.FindAsync(id);
-
-            if (art == null)
-                return NotFound();
-
-            _art_storeContext.Arts.Remove(art);
-            await _art_storeContext.SaveChangesAsync();
-            return Ok();
+            return await _artService.Delete(id);
         }
     }
 }

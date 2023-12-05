@@ -40,7 +40,7 @@ namespace art_store.DataAccess.Migrations
                     b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -49,7 +49,7 @@ namespace art_store.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", "dbo");
                 });
 
             modelBuilder.Entity("art_store.Entities.Art", b =>
@@ -84,7 +84,7 @@ namespace art_store.DataAccess.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Arts");
+                    b.ToTable("Arts", "dbo");
                 });
 
             modelBuilder.Entity("art_store.Entities.Driver", b =>
@@ -109,7 +109,7 @@ namespace art_store.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drivers");
+                    b.ToTable("Drivers", "dbo");
                 });
 
             modelBuilder.Entity("art_store.Entities.User", b =>
@@ -141,7 +141,7 @@ namespace art_store.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", "dbo");
                 });
 
             modelBuilder.Entity("Order", b =>
@@ -152,9 +152,7 @@ namespace art_store.DataAccess.Migrations
 
                     b.HasOne("art_store.Entities.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Driver");
 

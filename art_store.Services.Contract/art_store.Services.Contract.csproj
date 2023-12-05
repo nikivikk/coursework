@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\art_store.art_storeDto\art_store.art_storeDto.csproj" />
+    <ProjectReference Include="..\art_store.Entities\art_store.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
