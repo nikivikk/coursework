@@ -56,8 +56,8 @@ namespace art_store.Services
 
         public async Task<UserDto> GetByEmail(string email)
         {
-            var user = await _userRepository.GetByEmail(email);
-
+            var user = await _userRepository.GetByEmail(email)
+             ?? throw new Exception("User not exist");
             return _mapper.Map<UserDto>(user);
         }
 
