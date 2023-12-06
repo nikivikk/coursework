@@ -46,10 +46,42 @@ else
                 <MudText Typo="Typo.h4">Price: $@art.Price</MudText>
             </MudCardContent>
             <MudCardActions>
-                <MudButton Variant="Variant.Text" Color="Color.Primary">Order</MudButton>
+                <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ShoppingCart" DisableElevation="true" OnClick="OpenDialog" />
             </MudCardActions>
         </MudCard>
     </div>
+
+    <MudDialog IsOpen="@isDialogOpen">
+        <DialogContent>
+            <MudText Typo="Typo.h5">Order Details</MudText>
+            <!--  формa для ввода деталей заказа -->
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="CloseDialog">Cancel</MudButton>
+            <MudButton Color="Color.Primary" OnClick="SubmitOrder">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+    @code {
+    bool isDialogOpen;
+
+    void OpenDialog()
+    {
+        isDialogOpen = true;
+    }
+
+    void CloseDialog()
+    {
+        isDialogOpen = false;
+    }
+
+    void SubmitOrder()
+    {
+        //  код для обработки заказа
+        CloseDialog();
+    }
+}
+
 
 }
 
