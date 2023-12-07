@@ -8,7 +8,10 @@ namespace art_store.Mappings
     {
         public UserProfile()
         {
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>()
+                .ReverseMap()
+                // Naming can be refactored.
+                .ForMember(dest => dest.Name, options => options.MapFrom(x => x.Username));
             CreateMap<User, CreateUserDto>().ReverseMap();
 
         }

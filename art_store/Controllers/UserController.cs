@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using art_store.Services.Contract;
 using art_store.art_storeDto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace art_store.Controllers
 {
@@ -25,6 +26,7 @@ namespace art_store.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<int>> Create([FromBody] UserDto user)
         {
             return await _userService.Create(user);
