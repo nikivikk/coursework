@@ -42,10 +42,17 @@ namespace art_store.Web.Requests
 
         public async Task<UserDto> GetByEmail(string email)
         {
-
-            var response = await _httpClient.GetFromJsonAsync<UserDto>($"User/{email}");
-            return response ?? throw new HttpRequestException($"Couldn't get user with email {email}");
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<UserDto>($"User/{email}");
+                return response;
+            }
+            catch (HttpRequestException)
+            {
+                return null;
+            }
         }
+
 
 
         public async Task<List<UserDto>> GetAll()

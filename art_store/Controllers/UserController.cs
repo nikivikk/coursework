@@ -46,6 +46,12 @@ namespace art_store.Controllers
             return await _userService.GetById(id);
         }
 
+        [HttpGet("/find-user")]
+        public async Task<ActionResult<UserDto>> GetByEmai(string email)
+        {
+            return await _userService.GetByEmail(email);
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<int>> DeleteProductById(int id)
         {
