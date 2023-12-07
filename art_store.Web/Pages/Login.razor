@@ -3,7 +3,7 @@
 @using MudBlazor
 @using art_store.Services.Contract;
 @using art_store.art_storeDto;
-@inject IUserService _userService;
+@inject IAuthenticationService AuthenticationService;
 @inject NavigationManager NavManager;
 @using System.ComponentModel.DataAnnotations
 
@@ -47,31 +47,21 @@
 </EditForm>
 
 @code {
-    LoginForm model = new LoginForm();
+    LoginDto model = new();
     bool success;
-
-    public class LoginForm
+    [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private async Task OnValidSubmit(EditContext context)
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        var model = (LoginDto)context.Model;
+        var result = await AuthenticationService.Login(model);
 
-        [Required]
-        public string Password { get; set; }
-    }
-
-    private async void OnValidSubmit(EditContext context)
-    {
-        // Здесь вы можете добавить код для проверки учетных данных пользователя
-        var user = await _userService.GetByEmail(model.Email);
-        if (user != null && model.Password == user.Password) // Проверьте, что пароли совпадают
+        if (result.IsSuccessful)
         {
             success = true;
-            // Здесь вы можете добавить код для входа в систему
         }
         else
         {
-            NavManager.NavigateTo("/registration");
+            NavManager.NavigateTo("/register");
         }
         StateHasChanged();
     }

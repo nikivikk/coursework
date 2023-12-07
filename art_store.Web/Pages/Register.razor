@@ -1,9 +1,9 @@
-﻿@page "/registration"
+﻿@page "/register"
 
 @using MudBlazor
 @using art_store.Services.Contract;
 @using art_store.art_storeDto;
-@inject IUserService _userService;
+@inject IAuthenticationService AuthenticationService;
 @inject NavigationManager NavManager;
 @using System.ComponentModel.DataAnnotations
 
@@ -14,16 +14,14 @@
     <MudItem xs="12" sm="7">
         <MudCard>
             <MudCardContent>
-                <MudTextField Label="FIO" HelperText="Max. 30 characters"
-                              @bind-Value="model.FIO" For="@(() => model.FIO)"/>
-                <MudTextField Label="Age" 
-                    @bind-Value="model.Age" For="@(() => model.Age)" />
+                <MudTextField Label="First name" HelperText="Max. 8 characters"
+                              @bind-Value="model.Name" For="@(() => model.Name)"/>
                 <MudTextField Label="Email" Class="mt-3"
                               @bind-Value="model.Email" For="@(() => model.Email)"/>
                 <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
                               @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password"/>
                 <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
-                              @bind-Value="model.Password2" For="@(() => model.Password2)" InputType="InputType.Password"/>
+                              @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" InputType="InputType.Password"/>
             </MudCardContent>
             <MudCardActions>
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
@@ -55,46 +53,21 @@
 
 
 @code {
-    int countId = 0;
-    RegisterAccountForm model = new RegisterAccountForm();
+    private RegisterDto model = new();
+
     bool success;
 
-    public class RegisterAccountForm
+    private async Task OnValidSubmit(EditContext context)
     {
-        [Required]
-        [StringLength(30, ErrorMessage = "Name length can't be more than 8.")]
-        public string FIO { get; set; }
+        var model = (RegisterDto)context.Model;
+        var result = await AuthenticationService.Register(model);
 
-        public int Age { get; set; }
+        if (result.IsSuccessful)
+        {
+            NavManager.NavigateTo("/login");
+        }
 
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [StringLength(30, ErrorMessage = "Password must be at least 8 characters long.", MinimumLength = 8)]
-        public string Password { get; set; }
-
-        [Required]
-        [Compare(nameof(Password))]
-        public string Password2 { get; set; }
-    }
-
-    private void OnValidSubmit(EditContext context)
-    {
-
-        var user = new UserDto
-            {   Id = countId,
-                Fio = model.FIO,
-                Email = model.Email,
-                Password = model.Password,
-                Age = model.Age,
-                Role = "user"
-            };
-
-        _userService.Create(user);
-        success = true;
-        countId += 1;
         StateHasChanged();
     }
+
 }

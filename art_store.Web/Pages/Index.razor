@@ -4,31 +4,51 @@
 @using art_store.Services.Contract;
 @using art_store.art_storeDto;
 @inject IArtService _artService;
+@inject IAuthenticationService AuthenticationService;
 @inject NavigationManager NavManager;
 
 <PageTitle>Index</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <MudTable Context="table_context" Items="@arts" Hover="true" Breakpoint="Breakpoint.Sm">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Author</MudTh>
+                <MudTh>Year</MudTh>
+                <MudTh>Price</MudTh>
+                <MudTh>Actions</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@table_context.Name</MudTd>
+                    <MudTd DataLabel="Author">@table_context.Author</MudTd>
+                    <MudTd DataLabel="Year">@table_context.Year</MudTd>
+                    <MudTd DataLabel="Price">@table_context.Price</MudTd>
+                    <MudTd DataLabel="Actions"><MudButton OnClick="@( () => OnGetArtClick(table_context) )" Variant="Variant.Filled" Color="Color.Primary">Go to product</MudButton></MudTd>
+                </RowTemplate>
+            </MudTable>
+        </Authorized>
+        <NotAuthorized>
+            <p>Sorry, there's nothing at this address.</p>
+        </NotAuthorized>
+    </AuthorizeView>
 
-<MudTable Items="@arts" Hover="true" Breakpoint="Breakpoint.Sm">
-    <HeaderContent>
-        <MudTh>Name</MudTh>
-        <MudTh>Author</MudTh>
-        <MudTh>Year</MudTh>
-        <MudTh>Price</MudTh>
-        <MudTh>Actions</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Author">@context.Author</MudTd>
-        <MudTd DataLabel="Year">@context.Year</MudTd>
-        <MudTd DataLabel="Price">@context.Price</MudTd>
-        <MudTd DataLabel="Actions"><MudButton OnClick="@( () => OnGetArtClick(context) )" Variant="Variant.Filled" Color="Color.Primary">Go to product</MudButton></MudTd>
-    </RowTemplate>
-</MudTable>
-@code {
+
+
+    @code {
     private List<ArtDto>? arts;
+
+    [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
     protected async override Task OnInitializedAsync()
     {
-        arts = await _artService.GetAll();
+        if (await AuthenticationService.IsAuthenticated())
+        {
+            arts = await _artService.GetAll();
+        }
+        else
+        {
+            NavManager.NavigateTo("/login");
+        }
+
     }
 
     private void OnGetArtClick(ArtDto context)
