@@ -42,7 +42,7 @@ namespace art_store.Controllers
         public async Task<ActionResult<ArtDto>> GetArtById(int id)
         {
             return await _artService.GetById(id);
-        }
+            }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<int>>DeleteProductById(int id)

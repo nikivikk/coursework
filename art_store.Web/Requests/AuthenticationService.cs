@@ -37,7 +37,6 @@ namespace art_store.Web.Requests
             
             var loginAsJson = JsonSerializer.Serialize(loginModel);
             var response = await _httpClient.PostAsync("account/login", new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
-            var rrrrr = await response.Content.ReadAsStringAsync();
             var loginResult = JsonSerializer.Deserialize<LoginResultDto>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); 
             if (!response.IsSuccessStatusCode)
             {

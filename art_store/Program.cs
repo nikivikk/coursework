@@ -74,6 +74,7 @@ builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenProviderService, TokenProviderService>();
 builder.Services.AddAutoMapper(typeof(ArtProfile));
 builder.Services.AddAutoMapper(typeof(DriverProfile));
 builder.Services.AddAutoMapper(typeof(OrderProfile));

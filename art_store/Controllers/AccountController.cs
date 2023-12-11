@@ -51,32 +51,55 @@ namespace art_store.Controllers
             try
             {
                 var user = await _userManager.FindByEmailAsync(login.Email);
+                if (user is null)
+                {
+                    return BadRequest(new LoginResultDto { IsSuccessful = false, Error = "Username and password are invalid." });
+                }
                 var result = await _signInManager.PasswordSignInAsync(user, login.Password!, false, false);
                 if (!result.Succeeded) return BadRequest(new LoginResultDto { IsSuccessful = false, Error = "Username and password are invalid." });
+
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.Name, login.Email!),
+                    new Claim(ClaimTypes.UserData, user.Id.ToString())
+                };
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]!));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
+
+                var token = new JwtSecurityToken(
+                    _configuration["JwtIssuer"],
+                    _configuration["JwtAudience"],
+                    claims,
+                    expires: expiry,
+                    signingCredentials: creds
+                );
+
+                return Ok(new LoginResultDto { IsSuccessful = true, AccessToken = new JwtSecurityTokenHandler().WriteToken(token) });
             }
             catch (Exception ex)
             {
                 return BadRequest(new LoginResultDto { IsSuccessful = false, Error = "Username and password are invalid." });
             }
 
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.Name, login.Email!)
-        };
+           
+            //try
+            //{
+            //    var user = await _userManager.FindByEmailAsync(login.Email);
+            //    var result = await _signInManager.PasswordSignInAsync(user, login.Password!, false, false);
+            //    if (!result.Succeeded) return BadRequest(new LoginResultDto { IsSuccessful = false, Error = "Username and password are invalid." });
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(new LoginResultDto { IsSuccessful = false, Error = "Username and password are invalid." });
+            //}
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
+            //var claims = new[]
+            //{
+            //new Claim(ClaimTypes.Name, login.Email!)
+       
 
-            var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtAudience"],
-                claims,
-                expires: expiry,
-                signingCredentials: creds
-            );
-
-            return Ok(new LoginResultDto { IsSuccessful = true, AccessToken = new JwtSecurityTokenHandler().WriteToken(token) });
+            
         }
     }
 }

@@ -14,10 +14,4 @@ public class Order
 
     public User? User { get; set; }
 
-
-
-
-    //public List<Driver> Drivers { get; set; }
-
-    //public List<User> Users { get; set; }
-}
+}   

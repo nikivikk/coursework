@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
+using art_store.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredLocalStorageAsSingleton();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped(sp => new HttpClient
 {
@@ -20,7 +22,7 @@ builder.Services.AddScoped<ArtAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider, ArtAuthenticationStateProvider>();
 builder.Services.AddScoped<IArtService, ApiArtService>();
 builder.Services.AddScoped<IUserService, ApiUserService>();
-
+builder.Services.AddScoped<IOrderService, ApiOrderService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddMudServices(); 

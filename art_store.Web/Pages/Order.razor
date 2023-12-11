@@ -1,0 +1,61 @@
+﻿@page "/submit-order"
+
+@using Microsoft.AspNetCore.Http;
+@using MudBlazor
+@using art_store.Services.Contract;
+@using art_store.art_storeDto;
+@inject IDialogService DialogService
+@inject IUserService _userService;
+@inject IArtService _artService;
+@inject IOrderService _orderService;
+@inject IAuthenticationService AuthenticationService;
+@inject NavigationManager NavManager;
+@inject IHttpContextAccessor HttpContextAccessor;
+<PageTitle>Fill order form</PageTitle>
+@* <MudDialog>
+    <DialogContent> *@
+        <MudForm>
+            <MudDatePicker Label="Delivery Date" @bind-Date="@Delivery_Date" />
+            <MudTextField Label="Delivery Address" @bind-Value="@Address" />
+        </MudForm>
+<MudButton Color="Color.Primary" OnClick="@SubmitOrder">Submit Order</MudButton>
+    @* </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="@SubmitOrder">Submit Order</MudButton>
+    </DialogActions>
+</MudDialog> *@
+@code
+{
+    private DateTime? Delivery_Date = DateTime.Now;
+    private string Address = "rddtrdk";
+    private void SubmitOrder()
+    {
+        if (Delivery_Date.HasValue && !string.IsNullOrEmpty(Address))
+        {
+            
+            var order = new OrderDto
+                    {
+                        DeliveryAddress= Address,
+                        DeliveryData = Delivery_Date.Value,
+                    };
+
+            _orderService.Create(order);
+        }
+        else
+        {
+            
+            string ErrorMessage = "Fill the form correctly";
+        }
+        StateHasChanged();
+     }
+
+    [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        if (!await AuthenticationService.IsAuthenticated())
+        {
+            NavManager.NavigateTo("/login");
+        }
+
+    }
+}

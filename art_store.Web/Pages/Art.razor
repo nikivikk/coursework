@@ -9,7 +9,10 @@
 
 <PageTitle>Art Details</PageTitle>
 
+ 
 @code {
+
+    bool disabled = false;
     private ArtDto? art;
     [Parameter]
     public int Id { get; set; }
@@ -31,14 +34,118 @@
 }
 else
 {
-    @* <MudPaper Elevation="1" Outlined="true">
-        <MudText Typo="Typo.h6">@art.Name</MudText>
-        <MudText Typo="Typo.body1">Author: @art.Author</MudText>
-        <MudText Typo="Typo.body1">Year: @art.Year</MudText>
-        <MudText Typo="Typo.body1">Price: @art.Price</MudText>
-    </MudPaper> *@
     <div style="display: flex; justify-content: center;">
         <MudCard Height="450" Style="object-fit: contain; width: 450px;">
+            <MudCardMedia Image=@art.PictureLink Height="350" Style="object-fit: contain; width: 450px;" />
+            <MudCardContent>
+                <MudText Typo="Typo.h4">@art.Name</MudText>
+                <MudText Typo="Typo.h5">Author: @art.Author</MudText>
+                <MudText Typo="Typo.h4">Price: $@art.Price</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Href="/submit-order"
+                           Target="_blank"
+                           Variant="Variant.Filled"
+                           EndIcon="@Icons.Filled.ShoppingCart"
+                           Color="Color.Primary"
+                           Disabled=@disabled>
+                    Submit order
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </div>
+}
+   
+
+
+
+
+
+@* @page "/art/{Id:int}"
+
+@using MudBlazor
+@using art_store.Services.Contract;
+@using art_store.art_storeDto;
+@inject IAuthenticationService AuthenticationService;
+@inject IArtService _artService;
+@inject NavigationManager NavManager;
+@inject ISnackbar SnackbarService;
+
+<PageTitle>Art Details</PageTitle>
+
+@code {
+    private ArtDto? art;
+    private bool isLoading = true;
+    private string errorMessage = "";
+    private bool isDialogOpen = false; // Инициализируем переменную состояния для диалогового окна
+    private MudDatePicker _picker; // Этот компонент будет инициализирован через @ref
+    private DateTime? DeliveryDate = DateTime.Today;
+    private string DeliveryAddress { get; set; } = ""; // Инициализируем с пустой строкой
+    private bool autoClose = false; // Инициализируем переменную, если она используется
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!await AuthenticationService.IsAuthenticated())
+        {
+            NavManager.NavigateTo("/login");
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            art = await _artService.GetById(Id);
+            if (art == null)
+            {
+                errorMessage = "Art object does not exist.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading art: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    // Методы для работы с диалоговым окном
+    void OpenDialog()
+    {
+        isDialogOpen = true;
+        StateHasChanged(); // Принудительно вызываем перерисовку компонента
+    }
+
+    void CloseDialog()
+    {
+        isDialogOpen = false;
+        StateHasChanged(); // Принудительно вызываем перерисовку компонента
+    }
+
+    void SubmitOrder()
+    {
+        // Здесь должен быть код для обработки заказа
+        CloseDialog(); // Закрываем диалоговое окно после обработки заказа
+    }
+}
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p>@errorMessage</p>
+}
+else
+{
+    <div style="display: flex; justify-content: center;">
+        <MudCard Height="550px" Style="object-fit: contain; width: 450px;">
             <MudCardMedia Image=@art.PictureLink Height="350" Style="object-fit: contain; width: 450px;" />
             <MudCardContent>
                 <MudText Typo="Typo.h4">@art.Name</MudText>
@@ -54,35 +161,36 @@ else
     <MudDialog IsOpen="@isDialogOpen">
         <DialogContent>
             <MudText Typo="Typo.h5">Order Details</MudText>
-            <!--  формa для ввода деталей заказа -->
+            <MudStack>
+                <MudPaper Class="pa-4">
+                    <MudStack Row="true">
+                        <MudAvatar Image=@art.PictureLink Size="Size.Large" />
+                        <MudStack Justify="Justify.Center" Spacing="0">
+                            <MudText Typo="Typo.body1">@art.Name</MudText>
+                            <MudText Typo="Typo.body2">@art.Price</MudText>
+                        </MudStack>
+                    </MudStack>
+                </MudPaper>
+            <MudText Typo="Typo.h5">Add details to make order</MudText>
+                <MudPaper Class="pa-4">
+                    <MudStack Spacing="4">
+                        <MudDatePicker @ref="_picker" Label="With action buttons" @bind-Date="DeliveryDate" AutoClose="@autoClose">
+                            <PickerActions>
+                                <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                                <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
+                                <MudButton Color="Color.Primary" OnClick="@(() => _picker.Close())">Ok</MudButton>
+                            </PickerActions>
+                        </MudDatePicker>
+                            <MudTextField @bind-Value="DeliveryAddress" Label="Standard" Variant="Variant.Text"></MudTextField>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true">Pay Now</MudButton>
+                    </MudStack>
+                </MudPaper>
+            </MudStack>
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="CloseDialog">Cancel</MudButton>
-            <MudButton Color="Color.Primary" OnClick="SubmitOrder">Submit</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitOrder">Submit order</MudButton>
         </DialogActions>
     </MudDialog>
 
-    @code {
-    bool isDialogOpen;
-
-    void OpenDialog()
-    {
-        isDialogOpen = true;
-    }
-
-    void CloseDialog()
-    {
-        isDialogOpen = false;
-    }
-
-    void SubmitOrder()
-    {
-        //  код для обработки заказа
-        CloseDialog();
-    }
-}
-
-
-}
-
-
+} *@
